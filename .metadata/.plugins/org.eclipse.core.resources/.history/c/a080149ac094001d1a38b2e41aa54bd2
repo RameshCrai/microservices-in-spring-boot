@@ -1,0 +1,13 @@
+package com.hotel.Exception;
+
+@Ex
+public class ResourceNotFoundException extends RuntimeException{
+
+	ResourceNotFoundException(){
+		super("Given hotel Id is not Avaiable here ?? ");
+	}
+	
+	ResourceNotFoundException(String msg){
+		super(msg);
+	}
+}

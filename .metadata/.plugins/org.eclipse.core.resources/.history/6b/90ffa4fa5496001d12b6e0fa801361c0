@@ -1,0 +1,40 @@
+package com.micro_user;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+
+import com.micro_user.external.RatingService;
+import com.micro_user.model.Rating;
+import com.micro_user.model.Rating.RatingBuilder;
+
+
+
+@EnableDiscoveryClient
+@SpringBootApplication
+@EnableFeignClients
+public class MicrouserApplication {
+	
+	
+
+	public static void main(String[] args) {
+		SpringApplication.run(MicrouserApplication.class, args);
+	}
+	
+	@Autowired
+	private RatingService ratingService;
+	
+	void vreatingRating() {
+		RatingBuilder rating = Rating.builder().rating(20).
+				userId("").hotelId("")
+				.feedback("This is created for to create hotel ");
+		
+		Rating rate = ratingService.createRating(rating);
+		
+		System.out.println("new Rating "+rate);
+	}
+	
+
+}

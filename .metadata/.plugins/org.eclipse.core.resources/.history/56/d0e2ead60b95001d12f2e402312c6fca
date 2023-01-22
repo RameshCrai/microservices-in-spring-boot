@@ -1,0 +1,7 @@
+package com.Rating.Repository;
+
+import com.Rating.entities.Rating;
+
+public interface RatingRepository extends MangoRepository<Rating, String>{
+
+}

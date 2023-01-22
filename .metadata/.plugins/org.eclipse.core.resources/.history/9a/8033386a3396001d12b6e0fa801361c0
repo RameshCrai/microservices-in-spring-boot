@@ -1,0 +1,5 @@
+package com.micro_user.config;
+
+public class Configuration {
+
+}

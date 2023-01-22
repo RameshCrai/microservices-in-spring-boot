@@ -1,0 +1,52 @@
+package com.micro_user.UserServiceImpl;
+
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.micro_user.Repository.UserRepository;
+import com.micro_user.exception.ResourceNotFoundException;
+import com.micro_user.model.User;
+import com.micro_user.service.UserService;
+
+
+@Service
+public class UserServiceImpl implements UserService{
+	
+	@Autowired
+	private UserRepository userRepository;
+
+	@Override
+	public User saveUser(User user) {
+		
+//		generated unique user id
+		String randomuid = UUID.randomUUID().toString();		
+		user.setId(randomuid);		
+		
+		return this.userRepository.save(user);
+	}
+
+	@Override
+	public List<User> getAllUser() {
+		
+		return this.userRepository.findAll();
+	}
+	
+//get single user
+	@Override
+	public User getuser(String id) {
+		
+		//get user from database with help of userRepository
+		
+		User user = userRepository.findById(id).orElseThrow(()-> 
+		new ResourceNotFoundException("User is not fond is the Given Id  ?? "+id));
+		
+		//fetch rating of the above user from rating 
+		
+		
+		return user;
+	}
+
+}

@@ -1,0 +1,20 @@
+package com.Rating.Repository;
+
+import java.util.List;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
+import com.Rating.entities.Rating;
+
+
+public interface RatingRepository extends MongoRepository<Rating, String>{
+
+	//custom finder method
+	 List<Rating> findByUserId(String uid);
+	
+	 List<Rating> findByHotelId(String hid);
+	
+	
+	
+}

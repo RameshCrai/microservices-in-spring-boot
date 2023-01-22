@@ -1,0 +1,71 @@
+package com.micro_user.UserServiceImpl;
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.micro_user.Repository.UserRepository;
+import com.micro_user.exception.ResourceNotFoundException;
+import com.micro_user.model.Rating;
+import com.micro_user.model.User;
+import com.micro_user.service.UserService;
+
+
+@Service
+public class UserServiceImpl implements UserService{
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	
+	//that copy data from the other services 
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	
+	private static org.slf4j.Logger logger =  LoggerFactory.getLogger(UserServiceImpl.class);
+
+	@Override
+	public User saveUser(User user) {
+		
+//		generated unique user id
+		String randomuid = UUID.randomUUID().toString();		
+		user.setId(randomuid);		
+		
+		return this.userRepository.save(user);
+	}
+
+	@Override
+	public List<User> getAllUser() {
+		
+		return this.userRepository.findAll();
+	}
+	
+//get single user
+	@Override
+	public User getuser(String id) {
+		
+		//get user from database with help of userRepository
+		
+		User user = userRepository.findById(id).orElseThrow(()-> 
+		new ResourceNotFoundException("User is not fond is the Given Id  ?? "+id));
+		
+		//fetch rating of the above user from rating 
+		//http://localhost:8083/ratings/hotel/530a921c-1fdf-4c85-8456-4aaf541210a5
+		
+		ArrayList<Rating> ratingOfuser = this.restTemplate.getForObject("http://localhost:8083/ratings/hotel/"+user.getId(), ArrayList.class);
+		logger.info("{}  ",ratingOfuser);
+		
+		user.setRatings(ratingOfuser);
+		
+		return user;
+	}
+
+}

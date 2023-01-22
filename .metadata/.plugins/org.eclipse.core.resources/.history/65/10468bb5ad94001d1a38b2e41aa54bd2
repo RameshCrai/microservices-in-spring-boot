@@ -1,0 +1,39 @@
+package com.micro_user.UserServiceImpl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.micro_user.Repository.UserRepository;
+import com.micro_user.exception.ResourceNotFoundException;
+import com.micro_user.model.User;
+import com.micro_user.service.UserService;
+
+
+@Service
+public class UserServiceImpl implements UserService{
+	
+	@Autowired
+	private UserRepository userRepository;
+
+	@Override
+	public User saveUser(User user) {
+		
+		return this.userRepository.save(user);
+	}
+
+	@Override
+	public List<User> getAllUser() {
+		
+		return this.userRepository.findAll();
+	}
+
+	@Override
+	public User getuser(String id) {
+		
+		return userRepository.findById(id).orElseThrow(()-> 
+		new ResourceNotFoundException("User is not fond is the Given Id  ?? "+id));
+	}
+
+}
